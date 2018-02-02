@@ -21,23 +21,29 @@ function isSelectionInsideElement(tagName) {
 let Block = Quill.import('blots/block');
 let BlockEmbed = Quill.import('blots/block/embed');
 let Keyboard = Quill.import('modules/keyboard');
+// let Icons = Quill.import('ui/icons');
+
+// Icons['bold'] = '<i class="fas fa-bold"></i>';
+// Icons['italic'] = '<i class="fas fa-italic"></i>';
+// Icons['link'] = '<i class="fas fa-link"></i>';
+// Icons['header'] = '<i class="fas fa-heading"></i>';
+// Icons['blockquote'] = '<i class="fas fa-quote-left"></i>';
 let quill = new Quill('#editor-container', {
   theme: 'bubble'
 });
 
 quill.addContainer($("#sidebar-controls").get(0));
 quill.on(Quill.events.EDITOR_CHANGE, function(eventType, range) {
-  console.log(isSelectionInsideElement('li'))
   if (eventType !== Quill.events.SELECTION_CHANGE) return;
   if (range == null) return;
   if (range.length === 0) {
     let [block, offset] = quill.scroll.descendant(Block, range.index);
     if (block != null && block.domNode.firstChild instanceof HTMLBRElement && !isSelectionInsideElement('li')) {
       let lineBounds = quill.getBounds(range);
-        $('#sidebar-controls').show().css({
-          left: lineBounds.left - 120,
-          top: lineBounds.top - 2
-        });
+      $('#sidebar-controls').show().css({
+        left: lineBounds.left - 120,
+        top: lineBounds.top - 2
+      });
     } else {
       $('#sidebar-controls').fadeOut();
     }
@@ -57,12 +63,4 @@ $('#divider-button').click(function() {
   quill.insertEmbed(range.index, 'divider', true, Quill.sources.USER);
   quill.setSelection(range.index + 1, Quill.sources.SILENT);
   $('#sidebar-controls').fadeOut();
-});
-
-quill.on('editor-change', function(eventName, ...args) {
-  if (eventName === 'text-change') {
-    // console.log('attributes' in quill.getContents().ops[0])
-  } else if (eventName === 'selection-change') {
-    // console.log('old range', args[0])
-  }
 });

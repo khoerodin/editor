@@ -58,6 +58,9 @@ html, body {
   display: none;
   margin-left: 15px;
 }
+#sidebar-controls .fa {
+  color: #444;
+}
 button {
   cursor: pointer;
   display: inline-block;
@@ -69,4 +72,13 @@ button {
 }
 button:active, button:focus {
   outline: none;
+}
+#divider-button {
+  letter-spacing: .3em;
+}
+.ql-bubble.ql-toolbar button, .ql-bubble .ql-toolbar button {
+  color: #fff;
+}
+.ql-bubble .ql-tooltip {
+  border-radius: 5px !important;
 }
