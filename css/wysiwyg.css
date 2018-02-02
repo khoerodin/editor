@@ -15,14 +15,14 @@
 .wysiwyg cite{
   font-style:italic
 }
-.wysiwyg hr{
+/* .wysiwyg hr{
   background:#e6e6e6;
   border:none;
   display:block;
   height:1px;
   margin-bottom:1.4em;
   margin-top:1.4em
-}
+} */
 .wysiwyg img{
   vertical-align:text-bottom
 }
