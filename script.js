@@ -131,7 +131,7 @@ quill.on(Quill.events.EDITOR_CHANGE, function(eventType, range) {
   if (eventType !== Quill.events.SELECTION_CHANGE) return;
   if (range == null) return;
   if (range.length === 0) {
-    $('#tooltip-controls').hide();
+    $('#tooltip-controls').fadeOut('fast');
     let [block, offset] = quill.scroll.descendant(Block, range.index);
     if (block != null && block.domNode.firstChild instanceof HTMLBRElement) {
       let lineBounds = quill.getBounds(range);
@@ -140,14 +140,14 @@ quill.on(Quill.events.EDITOR_CHANGE, function(eventType, range) {
         top: lineBounds.top - 2
       });
     } else {
-      $('#tooltip-controls, #sidebar-controls').hide();
+      $('#tooltip-controls, #sidebar-controls').fadeOut('fast');
       $('#sidebar-controls').removeClass('active');
     }
   } else {
-    $('#sidebar-controls, #sidebar-controls').hide();
+    $('#sidebar-controls, #sidebar-controls').fadeOut();
     $('#sidebar-controls').removeClass('active');
     let rangeBounds = quill.getBounds(range);
-    $('#tooltip-controls').show().css({
+    $('#tooltip-controls').fadeIn('fast').css({
       left: rangeBounds.left + rangeBounds.width/2 - $('#tooltip-controls').outerWidth()/2,
       top: rangeBounds.bottom + 10
     });
