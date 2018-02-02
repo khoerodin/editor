@@ -90,15 +90,6 @@ html, body {
   display: none;
   margin-left: 15px;
 }
-/* #sidebar-controls #show-controls i.fa::before {
-  content: "\f067";
-}
-#sidebar-controls.active .controls {
-  display: inline-block;
-}
-#sidebar-controls.active #show-controls i.fa::before {
-  content: "\f00d";
-} */
 
 button {
   cursor: pointer;
