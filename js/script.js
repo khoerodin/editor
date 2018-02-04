@@ -137,29 +137,28 @@ $('#embed-button').click(function() {
       o = quill.scroll.line(e.index),
       l = _slicedToArray(o, 1),
       i = l[0];
+      localStorage.setItem('videoEmbedPosition', JSON.stringify(e))
   if (i) {
     var r = $(i.domNode).text();
     r || (i.domNode.setAttribute("data-placeholder", "Paste a YouTube, Vimeo or Twitter link, and press Enter"), $(i.domNode).addClass("embed-area url-area"), $('#sidebar-controls').fadeOut())
   }
 });
 
-function makeEmbedCode(url) {
-  document.querySelector('p.url-area').remove();
+function makeEmbedVideoCode(url) {
   let range = quill.getSelection(true);
   quill.insertEmbed(range.index, 'video', url, Quill.sources.USER);
   quill.formatText(range.index + 1, 1, { height: '100%', width: 'auto' });
-  quill.setSelection(range.index + 1, Quill.sources.SILENT);
+  quill.setSelection(range.index + 2, Quill.sources.SILENT);
+  document.querySelector('p.url-area').remove();
 }
 
 function detectEmbedUrl(t) {
   var e = void 0;
-  var sourceMedia = {};
+  let rt = true;
   if ((e = t.match(/^(https?):\/\/(www\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/i)) || (e = t.match(/^(https?):\/\/(www\.)?youtu\.be\/([a-zA-Z0-9_-]+)/i))) {
-    sourceMedia = {
-      type: 'video',
-      source: 'ytb',
-      url: 'https://www.youtube.com/embed/' + t.split("?v=")[1]
-    }
+    let url = 'https://www.youtube.com/embed/' + t.split("?v=")[1];
+    makeEmbedVideoCode(url);
+    rt = false;
   };
   if (e = t.match(/^(https?):\/\/(www\.)?vimeo\.com\/(\d+)/i)) {
     sourceMedia = {
@@ -180,13 +179,7 @@ function detectEmbedUrl(t) {
     }
   };
 
-  if (sourceMedia.type === 'video') {
-    if ( sourceMedia.source === 'ytb' ) {
-      makeEmbedCode(sourceMedia.url);
-    }
-  }
-
-  $('#sidebar-controls').fadeOut();
+  return rt;
 }
 
 quill.keyboard.addBinding({ key: Keyboard.keys.ENTER }, function(t, e) {
@@ -200,10 +193,11 @@ quill.keyboard.addBinding({ key: Keyboard.keys.ENTER }, function(t, e) {
           s = n.substr(0, r),
           u = void 0;
       if (u = s.match(/(^|\s)(https?:\/\/\S+)$/)) {
-        detectEmbedUrl(u[2])
+        return detectEmbedUrl(u[2])
+      } else {
+        return true
       }
   }
-  return !0
 });
 
 quill.keyboard.bindings[Keyboard.keys.ENTER].unshift(quill.keyboard.bindings[Keyboard.keys.ENTER].pop())
