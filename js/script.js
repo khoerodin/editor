@@ -161,22 +161,13 @@ function detectEmbedUrl(t) {
     rt = false;
   };
   if (e = t.match(/^(https?):\/\/(www\.)?vimeo\.com\/(\d+)/i)) {
-    sourceMedia = {
-      type: 'video',
-      source: 'vmo'
-    }
+
   };
   if (e = t.match(/^(https?):\/\/(www\.|mobile\.)?twitter\.com\/(.+)\/status\/(\d+)/i)) {
-    sourceMedia = {
-      type: 'socmed',
-      source: 'twt'
-    }
+
   };
   if (e = t.match(/^(https?):\/\/(t\.me|telegram\.me|telegram\.dog)\/([a-zA-Z0-9_]+)\/(\d+)/i)) {
-    sourceMedia = {
-      type: 'socmed',
-      source: 'tlg'
-    }
+
   };
 
   return rt;
