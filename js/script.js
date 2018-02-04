@@ -46,17 +46,6 @@ _slicedToArray = function() {
 
 _removePlaceholder = function() {
   $(".embed-area").removeAttr("data-placeholder").removeClass("embed-area")
-},
-
-_getEmbedCode = async function(i, a, s, url) {
-  let embedCode = await $.ajax('http://api.test/api/v1/embeds?c='+url);
-  Delta = Quill.import('delta');
-  if (embedCode) {
-    var h = i.offset(a.scroll);
-    return a.updateContents((new Delta).retain(h)["delete"](s.length).insert({
-      blockFigure: embedCode
-    }), Quill.sources.USER), '', !1
-  }
 };
 
 let Block = Quill.import('blots/block');
@@ -91,7 +80,50 @@ class DividerBlot extends BlockEmbed {}
 DividerBlot.blotName = 'divider';
 DividerBlot.tagName = 'hr';
 
+class VideoBlot extends BlockEmbed {
+  static create(url) {
+    let node = super.create();
+    let wrapper = document.createElement('div');
+    node.setAttribute('src', url);
+    node.setAttribute('frameborder', '0');
+    node.setAttribute('allowfullscreen', true);
+    wrapper.setAttribute('class', 'object-wrapper')
+    wrapper.appendChild(node);
+    return wrapper;
+  }
+
+  static formats(node) {
+    let format = {};
+    if (node.hasAttribute('height')) {
+      format.height = node.getAttribute('height');
+    }
+    if (node.hasAttribute('width')) {
+      format.width = node.getAttribute('width');
+    }
+    return format;
+  }
+
+  static value(node) {
+    return node.getAttribute('src');
+  }
+
+  format(name, value) {
+    if (name === 'height' || name === 'width') {
+      if (value) {
+        this.domNode.setAttribute(name, value);
+      } else {
+        this.domNode.removeAttribute(name, value);
+      }
+    } else {
+      super.format(name, value);
+    }
+  }
+}
+VideoBlot.blotName = 'video';
+VideoBlot.tagName = 'iframe';
+
 Quill.register(DividerBlot);
+Quill.register(VideoBlot);
 
 $('#divider-button').click(function() {
   let range = quill.getSelection(true);
@@ -107,9 +139,55 @@ $('#embed-button').click(function() {
       i = l[0];
   if (i) {
     var r = $(i.domNode).text();
-    r || (i.domNode.setAttribute("data-placeholder", "Paste a YouTube, Vimeo or Twitter link, and press Enter"), $(i.domNode).addClass("embed-area"), $('#sidebar-controls').fadeOut())
+    r || (i.domNode.setAttribute("data-placeholder", "Paste a YouTube, Vimeo or Twitter link, and press Enter"), $(i.domNode).addClass("embed-area url-area"), $('#sidebar-controls').fadeOut())
   }
 });
+
+function makeEmbedCode(url) {
+  document.querySelector('p.url-area').remove();
+  let range = quill.getSelection(true);
+  quill.insertEmbed(range.index, 'video', url, Quill.sources.USER);
+  quill.formatText(range.index + 1, 1, { height: '100%', width: 'auto' });
+  quill.setSelection(range.index + 1, Quill.sources.SILENT);
+}
+
+function detectEmbedUrl(t) {
+  var e = void 0;
+  var sourceMedia = {};
+  if ((e = t.match(/^(https?):\/\/(www\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/i)) || (e = t.match(/^(https?):\/\/(www\.)?youtu\.be\/([a-zA-Z0-9_-]+)/i))) {
+    sourceMedia = {
+      type: 'video',
+      source: 'ytb',
+      url: 'https://www.youtube.com/embed/' + t.split("?v=")[1]
+    }
+  };
+  if (e = t.match(/^(https?):\/\/(www\.)?vimeo\.com\/(\d+)/i)) {
+    sourceMedia = {
+      type: 'video',
+      source: 'vmo'
+    }
+  };
+  if (e = t.match(/^(https?):\/\/(www\.|mobile\.)?twitter\.com\/(.+)\/status\/(\d+)/i)) {
+    sourceMedia = {
+      type: 'socmed',
+      source: 'twt'
+    }
+  };
+  if (e = t.match(/^(https?):\/\/(t\.me|telegram\.me|telegram\.dog)\/([a-zA-Z0-9_]+)\/(\d+)/i)) {
+    sourceMedia = {
+      type: 'socmed',
+      source: 'tlg'
+    }
+  };
+
+  if (sourceMedia.type === 'video') {
+    if ( sourceMedia.source === 'ytb' ) {
+      makeEmbedCode(sourceMedia.url);
+    }
+  }
+
+  $('#sidebar-controls').fadeOut();
+}
 
 quill.keyboard.addBinding({ key: Keyboard.keys.ENTER }, function(t, e) {
   var a = quill,
@@ -122,7 +200,7 @@ quill.keyboard.addBinding({ key: Keyboard.keys.ENTER }, function(t, e) {
           s = n.substr(0, r),
           u = void 0;
       if (u = s.match(/(^|\s)(https?:\/\/\S+)$/)) {
-        _getEmbedCode(i, a, s, u[2]);
+        detectEmbedUrl(u[2])
       }
   }
   return !0
