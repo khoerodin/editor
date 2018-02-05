@@ -26,6 +26,29 @@
   pointer-events:none;
   font-family: CustomSansSerif, 'Lucida Grande', Arial, sans-serif;
 }
+.ql-editor .object-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  height: auto;
+}
+.ql-editor .object-wrapper iframe,
+.ql-editor .object-wrapper object,
+.ql-editor .object-wrapper embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.ql-editor figure {
+  margin: 0 !important;
+}
+.ql-editor figure:focus {
+  border: 2px solid #ccc;
+}
 /* Sidebar controls */
 #sidebar-controls {
   display: none;
@@ -63,24 +86,4 @@
 }
 .ql-bubble .ql-tooltip {
   border-radius: 5px !important;
-}
-.object-wrapper {
-  position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
-  overflow: hidden;
-  max-width: 100%;
-  height: auto;
-}
-.object-wrapper iframe,
-.object-wrapper object,
-.object-wrapper embed {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.wysiwyg figure {
-  margin: 0 !important;
 }

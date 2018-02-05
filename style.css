@@ -74,7 +74,7 @@
 .wysiwyg hr:before {
   content: '...';
 }
-.object-wrapper {
+.wysiwyg .object-wrapper {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
@@ -82,9 +82,9 @@
   max-width: 100%;
   height: auto;
 }
-.object-wrapper iframe,
-.object-wrapper object,
-.object-wrapper embed {
+.wysiwyg .object-wrapper iframe,
+.wysiwyg .object-wrapper object,
+.wysiwyg .object-wrapper embed {
   position: absolute;
   top: 0;
   left: 0;
