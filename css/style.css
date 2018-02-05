@@ -16,15 +16,17 @@
   overflow:hidden;
   pointer-events:none
 }
-.ql-editor figcaption:empty:not(:focus)::before {
-  content:attr(data-placeholder);
+.ql-editor figcaption {
+  outline: none;
+  font-family: CustomSansSerif, 'Lucida Grande', Arial, sans-serif;
   color:rgba(0,0,0,.44);
   font-weight:400;
   white-space:nowrap;
   text-overflow:ellipsis;
   overflow:hidden;
-  pointer-events:none;
-  font-family: CustomSansSerif, 'Lucida Grande', Arial, sans-serif;
+}
+.ql-editor figcaption:empty:not(:focus)::before {
+  content:attr(data-placeholder);
 }
 .ql-editor .object-wrapper {
   position: relative;
