@@ -94,6 +94,10 @@
 .wysiwyg figure {
   margin: 0 !important;
 }
+.wysiwyg figcaption {
+  font-size: .7em !important;
+  text-align: left;
+}
 .wysiwyg figcaption:empty:not(:focus)::before {
   content:attr(data-placeholder);
   color:rgba(0,0,0,.44);

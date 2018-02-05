@@ -60,6 +60,20 @@
   font-style: italic;
   margin-left: -1.2em;
 }
+.wysiwyg figcaption {
+  outline: none;
+  font-family: CustomSansSerif, 'Lucida Grande', Arial, sans-serif;
+  color:rgba(0,0,0,.44);
+  font-weight:400;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
+  text-align: left;
+  font-size: .7em;
+}
+.wysiwyg figcaption:empty:not(:focus)::before {
+  content:attr(data-placeholder);
+}
 .wysiwyg ol, .wysiwyg ul {
   margin-left: -1em !important;
 }
