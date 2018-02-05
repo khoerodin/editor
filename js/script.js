@@ -56,18 +56,10 @@ var isSelectionInsideElement = function (tagName) {
     document.querySelector('.url-area').removeAttribute('class')
   },
 
-  // https://gist.github.com/takien/4077195
+  // https://gist.github.com/takien/4077195, at RyanCasas comment
   getYoutubeId = function (url) {
-    var ID = '';
-    url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-    if (url[2] !== undefined) {
-      ID = url[2].split(/[^0-9a-z_\-]/i);
-      ID = ID[0];
-    }
-    else {
-      ID = url;
-    }
-    return ID;
+    url = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+    return undefined !== url[2]?url[2].split(/[^0-9a-z_\-]/i)[0]:url[0]
   },
 
   detectEmbedUrl = function (url) {
