@@ -1,63 +1,3 @@
-var Block = Quill.import('blots/block');
-var BlockEmbed = Quill.import('blots/block/embed');
-var Keyboard = Quill.import('modules/keyboard');
-var Clipboard = Quill.import('modules/clipboard');
-var Delta = Quill.import('delta');
-
-class DividerBlot extends BlockEmbed { }
-DividerBlot.blotName = 'divider';
-DividerBlot.tagName = 'hr';
-
-class VideoBlot extends BlockEmbed {
-  static create(url) {
-    var node = super.create();
-    node.setAttribute('src', url);
-    node.setAttribute('frameborder', '0');
-    node.setAttribute('allowfullscreen', true);
-
-    var wrapper = document.createElement('div');
-    wrapper.setAttribute('class', 'object-wrapper')
-    wrapper.appendChild(node);
-
-    var figcaption = document.createElement('figcaption');
-    figcaption.setAttribute('contenteditable', true)
-    figcaption.setAttribute('data-placeholder', 'Judul (opsional)');
-
-    var figure = document.createElement('figure');
-    figure.setAttribute('contenteditable', false)
-    figure.appendChild(wrapper);
-    figure.appendChild(figcaption);
-
-    return figure;
-  }
-
-  static value(figure) {
-    return figure.getElementsByTagName('iframe')[0].getAttribute('src');
-  }
-}
-
-class PlainClipboard extends Clipboard {
-  convert(html = null) {
-    if (typeof html === 'string') {
-      this.container.innerHTML = html;
-    }
-    let text = this.container.innerText;
-    this.container.innerHTML = '';
-    return new Delta().insert(text);
-  }
-}
-
-VideoBlot.blotName = 'video';
-VideoBlot.tagName = 'iframe';
-
-Quill.register(DividerBlot);
-Quill.register(VideoBlot);
-Quill.register('modules/clipboard', PlainClipboard, true);
-
-var quill = new Quill('#editor-container', {
-  theme: 'bubble'
-})
-
 var isSelectionInsideElement = function (tagName) {
   var sel, containerNode;
   tagName = tagName.toUpperCase();
@@ -108,34 +48,138 @@ var isSelectionInsideElement = function (tagName) {
     $('.embed-area').removeAttr('data-placeholder').removeClass('embed-area')
   },
 
-  makeEmbedVideoCode = function (url) {
+  makeEmbedVideoCode = function (embedData) {
     var range = quill.getSelection(true);
-    quill.insertEmbed(range.index, 'video', url, Quill.sources.USER);
+    quill.insertEmbed(range.index, 'video', embedData, Quill.sources.USER);
     quill.setSelection(range.index + 2, Quill.sources.SILENT);
     document.querySelector('p.url-area').remove();
     document.querySelector('.url-area').removeAttribute('class')
   },
 
-  detectEmbedUrl = function (t) {
-    var e = void 0;
-    var rt = true;
-    if ((e = t.match(/^(https?):\/\/(www\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/i)) || (e = t.match(/^(https?):\/\/(www\.)?youtu\.be\/([a-zA-Z0-9_-]+)/i))) {
-      var url = 'https://www.youtube.com/embed/' + t.split("?v=")[1];
-      makeEmbedVideoCode(url);
-      rt = false;
-    };
-    if (e = t.match(/^(https?):\/\/(www\.)?vimeo\.com\/(\d+)/i)) {
+  embedUrl = function (source) {
+    var rt = ''
+    if (source.toLowerCase() === 'youtube') {
+      rt = 'https://www.youtube.com/embed/'
+    }
 
-    };
-    if (e = t.match(/^(https?):\/\/(www\.|mobile\.)?twitter\.com\/(.+)\/status\/(\d+)/i)) {
+    return rt;
+  },
 
+  detectEmbedUrl = function (url) {
+    var rt = {}
+    if ((url.match(/^(https?):\/\/(www\.)?youtube\.com\/watch.*v=([a-zA-Z0-9_-]+)/i)) || (url.match(/^(https?):\/\/(www\.)?youtu\.be\/([a-zA-Z0-9_-]+)/i))) {
+      rt = {
+        id: t.split("?v=")[1],
+        source: 'youtube'
+      }
     };
-    if (e = t.match(/^(https?):\/\/(t\.me|telegram\.me|telegram\.dog)\/([a-zA-Z0-9_]+)\/(\d+)/i)) {
-
+    if (url.match(/^(https?):\/\/(www\.)?vimeo\.com\/(\d+)/i)) {
+      rt = {
+        id: '',
+        source: 'vimeo'
+      }
+    };
+    if (url.match(/^(https?):\/\/(www\.|mobile\.)?twitter\.com\/(.+)\/status\/(\d+)/i)) {
+      rt = {
+        id: '',
+        source: 'twitter'
+      }
+    };
+    if (url.match(/^(https?):\/\/(t\.me|telegram\.me|telegram\.dog)\/([a-zA-Z0-9_]+)\/(\d+)/i)) {
+      rt = {
+        id: '',
+        source: 'telegram'
+      }
     };
 
     return rt;
+  },
+
+  readUrl = function (url) {
+    var rt = true;
+    if (source = detectEmbedUrl(url).source === 'youtube') {
+      var embedData = {
+        id: t.split("?v=")[1],
+        source: source
+      }
+      makeEmbedVideoCode(embedData);
+      rt = false;
+    }
+
+    return rt;
   };
+
+var Block = Quill.import('blots/block');
+var BlockEmbed = Quill.import('blots/block/embed');
+var Keyboard = Quill.import('modules/keyboard');
+var Clipboard = Quill.import('modules/clipboard');
+var Delta = Quill.import('delta');
+
+class DividerBlot extends BlockEmbed { }
+DividerBlot.blotName = 'divider';
+DividerBlot.tagName = 'hr';
+
+class VideoBlot extends BlockEmbed {
+  static create(embedData) {
+    // untuk proses edit caption
+    // cek dulu, apakah url embed sama
+    // jika sama, true
+    // jika tidak, false, tidak usah dilanjutkan
+
+    var embedUrl = embedUrl(embedData.source)
+    var url = embedUrl + embedData.id
+    var node = super.create();
+    node.setAttribute('src', url);
+    node.setAttribute('data-src', embedData.source);
+    node.setAttribute('frameborder', '0');
+    node.setAttribute('allowfullscreen', true);
+
+    var wrapper = document.createElement('div');
+    wrapper.setAttribute('class', 'object-wrapper')
+    wrapper.appendChild(node);
+
+    var figcaption = document.createElement('figcaption');
+    figcaption.setAttribute('contenteditable', true)
+    figcaption.setAttribute('data-placeholder', 'Judul (opsional)');
+
+    var figure = document.createElement('figure');
+    figure.setAttribute('contenteditable', false)
+    figure.appendChild(wrapper);
+    figure.appendChild(figcaption);
+
+    return figure;
+  }
+
+  static value(figure) {
+    return {
+      id: figure.getElementsByTagName('iframe')[0].getAttribute('src'),
+      source: figure.getElementsByTagName('iframe')[0].getAttribute('data-src'),
+      caption: figure.getElementsByTagName('figcaption')[0].innerHTML
+    }
+  }
+}
+
+class PlainClipboard extends Clipboard {
+  convert(html = null) {
+    if (typeof html === 'string') {
+      this.container.innerHTML = html;
+    }
+    let text = this.container.innerText;
+    this.container.innerHTML = '';
+    return new Delta().insert(text);
+  }
+}
+
+VideoBlot.blotName = 'video';
+VideoBlot.tagName = 'iframe';
+
+Quill.register(DividerBlot);
+Quill.register(VideoBlot);
+Quill.register('modules/clipboard', PlainClipboard, true);
+
+var quill = new Quill('#editor-container', {
+  theme: 'bubble'
+})
 
 quill.addContainer($("#sidebar-controls").get(0));
 quill.on(Quill.events.EDITOR_CHANGE, function (eventType, range) {
@@ -190,7 +234,7 @@ quill.keyboard.addBinding({ key: Keyboard.keys.ENTER }, function (t, e) {
       s = n.substr(0, r),
       u = void 0;
     if (u = s.match(/(^|\s)(https?:\/\/\S+)$/)) {
-      return detectEmbedUrl(u[2])
+      return readUrl(u[2])
     } else {
       return true
     }
@@ -200,5 +244,5 @@ quill.keyboard.addBinding({ key: Keyboard.keys.ENTER }, function (t, e) {
 quill.keyboard.bindings[Keyboard.keys.ENTER].unshift(quill.keyboard.bindings[Keyboard.keys.ENTER].pop())
 
 // set contents
-var contents = [{"insert":"Toshi Omagari’s updated version opens up the typeface - version opens up the typeface"},{"attributes":{"header":1},"insert":"\n"},{"insert":"The decorative blackletter – "},{"attributes":{"link":"#"},"insert":"which offers a stark contrast with"},{"insert":" the other four typefaces included in the Wolpe Collection – drew on Berthold Wolpe’s time working in a metal foundry. As a result, it adopts the kinds of angular forms that would have been more easily chiselled into metal – appearing slightly less intricate than fellow blackletter faces.\nAn early specimen sheet, published in 1938, said the typeface was intending to cause a stir among “horizon-scanning advertisers”, however the design quickly fell into obscurity, particularly as a result of blackletter’s connotations."},{"attributes":{"blockquote":true},"insert":"\n"},{"insert":"An early specimen sheet"},{"attributes":{"header":2},"insert":"\n"},{"insert":"List Pertama"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Kedua"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Ketiga"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Keempat"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Kelima"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"An early specimen sheet"},{"attributes":{"header":2},"insert":"\n"},{"insert":"List Pertama"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Kedua"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Ketiga"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Keempat"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Kelima"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"There were reportedly only two sets of matrices ever made of Sachsenwald, which otherwise has lived on only through original drawings held by the Monotype archive. \n"},{"insert":{"divider":true}},{"insert":"As you’d expect, examples of it being used are limited, however it can be seen in a rare edition of the Rubaiyat of Omar Khayyam, published by Fanfare Press in the 1940s.\n"},{"insert":{"video":"https://www.youtube.com/embed/_Th1GTJmL2Y"}},{"insert":"Toshi Omagari’s updated version opens up the typeface for experimentation by today’s designers, and also introduces elements that make it easier for today’s purposes – including a romanized version of the distinctive traditional German X originally used in Sachsenwald.\nGet the Sachsenwald typeface"},{"attributes":{"header":2},"insert":"\n"},{"insert":"View the web specimen for Sachsenwald and The Wolpe Collection. All five families are included in Monotype Library Subscription. Get unlimited access to over 10,000 fonts for $9.99/month. Try it now for free.\nHeading 1"},{"attributes":{"header":1},"insert":"\n"},{"insert":"Heading 2"},{"attributes":{"header":2},"insert":"\n"},{"insert":"Heading 3"},{"attributes":{"header":3},"insert":"\n"},{"insert":"Heading 4"},{"attributes":{"header":4},"insert":"\n"},{"insert":"Heading 5"},{"attributes":{"header":5},"insert":"\n"},{"insert":"Heading 6"},{"attributes":{"header":6},"insert":"\n"}]
+var contents = [{ "insert": "Toshi Omagari’s updated version opens up the typeface - version opens up the typeface" }, { "attributes": { "header": 1 }, "insert": "\n" }, { "insert": "The decorative blackletter – " }, { "attributes": { "link": "#" }, "insert": "which offers a stark contrast with" }, { "insert": " the other four typefaces included in the Wolpe Collection – drew on Berthold Wolpe’s time working in a metal foundry. As a result, it adopts the kinds of angular forms that would have been more easily chiselled into metal – appearing slightly less intricate than fellow blackletter faces.\nAn early specimen sheet, published in 1938, said the typeface was intending to cause a stir among “horizon-scanning advertisers”, however the design quickly fell into obscurity, particularly as a result of blackletter’s connotations." }, { "attributes": { "blockquote": true }, "insert": "\n" }, { "insert": "An early specimen sheet" }, { "attributes": { "header": 2 }, "insert": "\n" }, { "insert": "List Pertama" }, { "attributes": { "list": "bullet" }, "insert": "\n" }, { "insert": "List Kedua" }, { "attributes": { "list": "bullet" }, "insert": "\n" }, { "insert": "List Ketiga" }, { "attributes": { "list": "bullet" }, "insert": "\n" }, { "insert": "List Keempat" }, { "attributes": { "list": "bullet" }, "insert": "\n" }, { "insert": "List Kelima" }, { "attributes": { "list": "bullet" }, "insert": "\n" }, { "insert": "An early specimen sheet" }, { "attributes": { "header": 2 }, "insert": "\n" }, { "insert": "List Pertama" }, { "attributes": { "list": "ordered" }, "insert": "\n" }, { "insert": "List Kedua" }, { "attributes": { "list": "ordered" }, "insert": "\n" }, { "insert": "List Ketiga" }, { "attributes": { "list": "ordered" }, "insert": "\n" }, { "insert": "List Keempat" }, { "attributes": { "list": "ordered" }, "insert": "\n" }, { "insert": "List Kelima" }, { "attributes": { "list": "ordered" }, "insert": "\n" }, { "insert": "There were reportedly only two sets of matrices ever made of Sachsenwald, which otherwise has lived on only through original drawings held by the Monotype archive. \n" }, { "insert": { "divider": true } }, { "insert": "As you’d expect, examples of it being used are limited, however it can be seen in a rare edition of the Rubaiyat of Omar Khayyam, published by Fanfare Press in the 1940s.\n" }, { "insert": { "video": { "id": "_Th1GTJmL2Y", "source": "youtube", "caption": "" } } }, { "insert": "Toshi Omagari’s updated version opens up the typeface for experimentation by today’s designers, and also introduces elements that make it easier for today’s purposes – including a romanized version of the distinctive traditional German X originally used in Sachsenwald.\nGet the Sachsenwald typeface" }, { "attributes": { "header": 2 }, "insert": "\n" }, { "insert": "View the web specimen for Sachsenwald and The Wolpe Collection. All five families are included in Monotype Library Subscription. Get unlimited access to over 10,000 fonts for $9.99/month. Try it now for free.\nHeading 1" }, { "attributes": { "header": 1 }, "insert": "\n" }, { "insert": "Heading 2" }, { "attributes": { "header": 2 }, "insert": "\n" }, { "insert": "Heading 3" }, { "attributes": { "header": 3 }, "insert": "\n" }, { "insert": "Heading 4" }, { "attributes": { "header": 4 }, "insert": "\n" }, { "insert": "Heading 5" }, { "attributes": { "header": 5 }, "insert": "\n" }, { "insert": "Heading 6" }, { "attributes": { "header": 6 }, "insert": "\n" }]
 quill.setContents(contents);
