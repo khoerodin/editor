@@ -124,6 +124,7 @@ class VideoBlot extends BlockEmbed {
     wrapper.appendChild(node);
 
     var figcaption = document.createElement('figcaption');
+    figcaption.setAttribute('data-placeholder', 'Judul (opsional)');
 
     var figure = document.createElement('figure');
     figure.appendChild(wrapper);
@@ -156,7 +157,7 @@ $('#embed-button').click(function () {
     i = l[0];
   if (i) {
     var r = $(i.domNode).text();
-    r || (i.domNode.setAttribute("data-placeholder", "Paste a YouTube, Vimeo or Twitter link, and press Enter"), $(i.domNode).addClass("embed-area url-area"), $('#sidebar-controls').fadeOut())
+    r || (i.domNode.setAttribute("data-placeholder", "Paste a YouTube link and press Enter"), $(i.domNode).addClass("embed-area url-area"), $('#sidebar-controls').fadeOut())
   }
 });
 
