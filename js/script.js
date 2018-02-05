@@ -1,6 +1,59 @@
 var Block = Quill.import('blots/block');
 var BlockEmbed = Quill.import('blots/block/embed');
 var Keyboard = Quill.import('modules/keyboard');
+var Clipboard = Quill.import('modules/clipboard');
+var Delta = Quill.import('delta');
+
+class DividerBlot extends BlockEmbed { }
+DividerBlot.blotName = 'divider';
+DividerBlot.tagName = 'hr';
+
+class VideoBlot extends BlockEmbed {
+  static create(url) {
+    var node = super.create();
+    node.setAttribute('src', url);
+    node.setAttribute('frameborder', '0');
+    node.setAttribute('allowfullscreen', true);
+
+    var wrapper = document.createElement('div');
+    wrapper.setAttribute('class', 'object-wrapper')
+    wrapper.appendChild(node);
+
+    var figcaption = document.createElement('figcaption');
+    figcaption.setAttribute('contenteditable', true)
+    figcaption.setAttribute('data-placeholder', 'Judul (opsional)');
+
+    var figure = document.createElement('figure');
+    figure.setAttribute('contenteditable', false)
+    figure.appendChild(wrapper);
+    figure.appendChild(figcaption);
+
+    return figure;
+  }
+
+  static value(figure) {
+    return figure.getElementsByTagName('iframe')[0].getAttribute('src');
+  }
+}
+
+class PlainClipboard extends Clipboard {
+  convert(html = null) {
+    if (typeof html === 'string') {
+      this.container.innerHTML = html;
+    }
+    let text = this.container.innerText;
+    this.container.innerHTML = '';
+    return new Delta().insert(text);
+  }
+}
+
+VideoBlot.blotName = 'video';
+VideoBlot.tagName = 'iframe';
+
+Quill.register(DividerBlot);
+Quill.register(VideoBlot);
+Quill.register('modules/clipboard', PlainClipboard, true);
+
 var quill = new Quill('#editor-container', {
   theme: 'bubble'
 })
@@ -107,43 +160,6 @@ quill.on(Quill.events.EDITOR_CHANGE, function (eventType, range) {
   var delta = quill.getContents();
   console.log('Delta:', delta.ops)
 });
-
-class DividerBlot extends BlockEmbed { }
-DividerBlot.blotName = 'divider';
-DividerBlot.tagName = 'hr';
-
-class VideoBlot extends BlockEmbed {
-  static create(url) {
-    var node = super.create();
-    node.setAttribute('src', url);
-    node.setAttribute('frameborder', '0');
-    node.setAttribute('allowfullscreen', true);
-
-    var wrapper = document.createElement('div');
-    wrapper.setAttribute('class', 'object-wrapper')
-    wrapper.appendChild(node);
-
-    var figcaption = document.createElement('figcaption');
-    figcaption.setAttribute('contenteditable', true)
-    figcaption.setAttribute('data-placeholder', 'Judul (opsional)');
-
-    var figure = document.createElement('figure');
-    figure.setAttribute('contenteditable', false)
-    figure.appendChild(wrapper);
-    figure.appendChild(figcaption);
-
-    return figure;
-  }
-
-  static value(figure) {
-    return figure.getElementsByTagName('iframe')[0].getAttribute('src');
-  }
-}
-VideoBlot.blotName = 'video';
-VideoBlot.tagName = 'iframe';
-
-Quill.register(DividerBlot);
-Quill.register(VideoBlot);
 
 document.getElementById('divider-button').addEventListener('click', function () {
   var range = quill.getSelection(true);
