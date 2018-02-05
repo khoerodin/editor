@@ -157,7 +157,7 @@ $('#embed-button').click(function () {
     i = l[0];
   if (i) {
     var r = $(i.domNode).text();
-    r || (i.domNode.setAttribute("data-placeholder", "Paste a YouTube link and press Enter"), $(i.domNode).addClass("embed-area url-area"), $('#sidebar-controls').fadeOut())
+    r || (i.domNode.setAttribute("data-placeholder", "Tempelkan tautan YouTube dan tekan Enter"), $(i.domNode).addClass("embed-area url-area"), $('#sidebar-controls').fadeOut())
   }
 });
 
