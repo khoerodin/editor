@@ -137,11 +137,6 @@ class VideoBlot extends BlockEmbed {
   }
 
   static create(embedData) {
-    // untuk proses edit caption
-    // cek dulu, apakah url embed sama
-    // jika sama, true
-    // jika tidak, false, tidak usah dilanjutkan
-
     var embedUrl = this.embedUrl(embedData.source)
     var url = embedUrl + embedData.id
     var node = super.create()
