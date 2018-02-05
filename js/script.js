@@ -181,14 +181,14 @@ quill.keyboard.addBinding({ key: Keyboard.keys.ENTER }, function (t, e) {
 
 quill.keyboard.bindings[Keyboard.keys.ENTER].unshift(quill.keyboard.bindings[Keyboard.keys.ENTER].pop())
 
-quill.keyboard.addBinding({ key: Keyboard.keys.BACKSPACE }, function (range, context) {
-  if ((isSelectionInsideElement('figcaption'))) {
-    return false
-  }
-  return true
-});
+// quill.keyboard.addBinding({ key: Keyboard.keys.BACKSPACE }, function (range, context) {
+//   if ((isSelectionInsideElement('figcaption'))) {
+//     return false
+//   }
+//   return true
+// });
 
-quill.keyboard.bindings[Keyboard.keys.BACKSPACE].unshift(quill.keyboard.bindings[Keyboard.keys.BACKSPACE].pop())
+// quill.keyboard.bindings[Keyboard.keys.BACKSPACE].unshift(quill.keyboard.bindings[Keyboard.keys.BACKSPACE].pop())
 
 // set contents
 var contents = [{"insert":"Toshi Omagari’s updated version opens up the typeface - version opens up the typeface"},{"attributes":{"header":1},"insert":"\n"},{"insert":"The decorative blackletter – "},{"attributes":{"link":"#"},"insert":"which offers a stark contrast with"},{"insert":" the other four typefaces included in the Wolpe Collection – drew on Berthold Wolpe’s time working in a metal foundry. As a result, it adopts the kinds of angular forms that would have been more easily chiselled into metal – appearing slightly less intricate than fellow blackletter faces.\nAn early specimen sheet, published in 1938, said the typeface was intending to cause a stir among “horizon-scanning advertisers”, however the design quickly fell into obscurity, particularly as a result of blackletter’s connotations."},{"attributes":{"blockquote":true},"insert":"\n"},{"insert":"An early specimen sheet"},{"attributes":{"header":2},"insert":"\n"},{"insert":"List Pertama"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Kedua"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Ketiga"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Keempat"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"List Kelima"},{"attributes":{"list":"bullet"},"insert":"\n"},{"insert":"An early specimen sheet"},{"attributes":{"header":2},"insert":"\n"},{"insert":"List Pertama"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Kedua"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Ketiga"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Keempat"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"List Kelima"},{"attributes":{"list":"ordered"},"insert":"\n"},{"insert":"There were reportedly only two sets of matrices ever made of Sachsenwald, which otherwise has lived on only through original drawings held by the Monotype archive. \n"},{"insert":{"divider":true}},{"insert":"As you’d expect, examples of it being used are limited, however it can be seen in a rare edition of the Rubaiyat of Omar Khayyam, published by Fanfare Press in the 1940s.\n"},{"insert":{"video":"https://www.youtube.com/embed/_Th1GTJmL2Y"}},{"insert":"Toshi Omagari’s updated version opens up the typeface for experimentation by today’s designers, and also introduces elements that make it easier for today’s purposes – including a romanized version of the distinctive traditional German X originally used in Sachsenwald.\nGet the Sachsenwald typeface"},{"attributes":{"header":2},"insert":"\n"},{"insert":"View the web specimen for Sachsenwald and The Wolpe Collection. All five families are included in Monotype Library Subscription. Get unlimited access to over 10,000 fonts for $9.99/month. Try it now for free.\nHeading 1"},{"attributes":{"header":1},"insert":"\n"},{"insert":"Heading 2"},{"attributes":{"header":2},"insert":"\n"},{"insert":"Heading 3"},{"attributes":{"header":3},"insert":"\n"},{"insert":"Heading 4"},{"attributes":{"header":4},"insert":"\n"},{"insert":"Heading 5"},{"attributes":{"header":5},"insert":"\n"},{"insert":"Heading 6"},{"attributes":{"header":6},"insert":"\n"}]
