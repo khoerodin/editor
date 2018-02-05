@@ -95,7 +95,7 @@
   margin: 0 !important;
 }
 .wysiwyg figcaption:empty:not(:focus)::before {
-  content: 'Judul (opsional)';
+  content:attr(data-placeholder);
   color:rgba(0,0,0,.44);
   font-weight:400;
   white-space:nowrap;
