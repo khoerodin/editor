@@ -206,8 +206,8 @@ quill.on(Quill.events.EDITOR_CHANGE, function (eventType, range) {
     $('#sidebar-controls').fadeOut()
   }
 
-  var delta = quill.getContents()
-  console.log('Delta:', delta.ops)
+  // var delta = quill.getContents()
+  // console.log('Delta:', delta.ops)
 });
 
 document.getElementById('divider-button').addEventListener('click', function () {
