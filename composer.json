@@ -1,0 +1,13 @@
+{
+    "name": "khoerodin/editor",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Khoerodin",
+            "email": "khoerodin@live.com"
+        }
+    ],
+    "require": {
+        "embed/embed": "^3.3"
+    }
+}
