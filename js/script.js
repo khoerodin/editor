@@ -159,7 +159,7 @@ class VideoBlot extends BlockEmbed {
     return {
       source: figure.getElementsByTagName('iframe')[0].getAttribute('data-source'),
       id: figure.getElementsByTagName('iframe')[0].getAttribute('data-id'),
-      caption: figure.getElementsByTagName('figcaption')[0].innerHTML
+      caption: figure.getElementsByTagName('figcaption')[0].innerText
     }
   }
 }
