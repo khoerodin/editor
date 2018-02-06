@@ -52,8 +52,8 @@ var isSelectionInsideElement = function (tagName) {
     var range = quill.getSelection(true)
     quill.insertEmbed(range.index, 'video', embedData, Quill.sources.USER)
     quill.setSelection(range.index + 2, Quill.sources.SILENT)
-    document.querySelector('p.url-area').remove()
-    document.querySelector('.url-area').removeAttribute('class')
+    document.querySelector('.url-area').remove() // tempat paste url
+    document.querySelector('.url-area').removeAttribute('class') // tempat kursor bawah figure
   },
 
   // https://gist.github.com/takien/4077195, at RyanCasas comment
