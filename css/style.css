@@ -24,17 +24,9 @@
   max-width: 100%;
   height: auto;
 }
-.ql-editor .rich-wrapper {
-  position: relative;
-  height: 0;
-  overflow: hidden;
-  max-height: 100%;
-  width: auto;
-}
 .ql-editor .video-wrapper iframe,
 .ql-editor .video-wrapper object,
-.ql-editor .video-wrapper embed,
-.ql-editor .rich-wrapper iframe {
+.ql-editor .video-wrapper embed{
   position: absolute;
   top: 0;
   left: 0;
