@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Telegraph</title>
+    <title>Editor</title>
     <link href="/css/quill.bubble.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/wysiwyg.css" rel="stylesheet">

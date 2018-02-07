@@ -31,7 +31,7 @@ class Grab {
     echo "    <meta name=\"format-detection\" content=\"telephone=no\" />\n";
     echo "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n";
     echo "    <meta name=\"MobileOptimized\" content=\"320\" />\n";
-    echo "    <style>body{margin:0;padding:0}html,body,iframe,video,object,embed{height:100%;width:100%}</style>\n";
+    echo "    <style>body{margin:0;padding:0}html,body,iframe,video,object,embed{height:100%;width:100%;overflow:hidden;}</style>\n";
     echo "  </head>\n";
     echo "  <body onresize=\"resize()\">\n";
     echo "    " . $embed->code;
