@@ -18,6 +18,8 @@
     <div id="editor-container" class="wysiwyg"></div>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/quill.min.js"></script>
+    <script src="/js/iframeResizer.min.js"></script>
+    <script src="/js/load-image.all.min.js"></script>
     <script src="/js/script.js"></script>
   </body>
 </html>
