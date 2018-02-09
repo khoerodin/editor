@@ -105,7 +105,7 @@ class Grab {
     echo "    <style>body{margin:0;padding:0}html,body,iframe{height:100%}</style>\n";
     echo "  </head>\n";
     echo "  <body onresize=\"resize()\">\n";
-    echo "    <iframe width=\"100%\" height=\"100%\" src=\"//player.vimeo.com/video/". $id ."/\" frameborder=\"0\" allowtransparency=\"true\" allowfullscreen=\"true\"></iframe>\n";
+    echo "    <iframe width=\"100%\" height=\"100%\" src=\"//player.vimeo.com/video/". $id ."?byline=0&badge=0&portrait=0&title=0\" frameborder=\"0\" allowtransparency=\"true\" allowfullscreen=\"true\"></iframe>\n";
     echo "    <script>\n";
     echo "      var _htmlNode = document.getElementsByTagName('html')[0];\n";
     echo "      var _maxHeight = 0;\n";
