@@ -8,6 +8,8 @@
     <link href="/css/wysiwyg.css" rel="stylesheet">
     <link href="/css/wysiwyg-custom.css" rel="stylesheet">
     <link href="/icons/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/icons/fas/css/fontawesome.min.css" rel="stylesheet">
+    <link href="/icons/fas/css/fa-solid.min.css" rel="stylesheet">
   </head>
   <body>
     <div id="sidebar-controls">

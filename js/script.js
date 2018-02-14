@@ -109,6 +109,7 @@ var BlockEmbed = Quill.import('blots/block/embed')
 var Keyboard = Quill.import('modules/keyboard')
 var Clipboard = Quill.import('modules/clipboard')
 var Delta = Quill.import('delta')
+var Icons = Quill.import('ui/icons');
 
 class DividerBlot extends BlockEmbed { }
 DividerBlot.blotName = 'divider'
@@ -191,6 +192,14 @@ class PlainClipboard extends Clipboard {
   }
 }
 Quill.register('modules/clipboard', PlainClipboard, true)
+
+// change icons
+Icons['bold'] = '<i class="fas fa-bold fa-lg"></i>';
+Icons['italic'] = '<i class="fas fa-italic fa-lg"></i>';
+Icons['link'] = '<i class="fas fa-link fa-lg"></i>';
+Icons['header']['1'] = '<i class="fas fa-heading fa-lg"></i>';
+Icons['header']['2'] = '<i class="fas fa-heading"></i>';
+Icons['blockquote'] = '<i class="fas fa-quote-left fa-lg"></i>';
 
 var quill = new Quill('#editor-container', {
   theme: 'bubble'
