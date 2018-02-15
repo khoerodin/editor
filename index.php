@@ -14,8 +14,8 @@
   <body>
     <div id="sidebar-controls">
       <button id="divider-button">...</button>
-      <button id="embed-button"><i class="fa fa-angle-left"></i>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></button>
-      <button id="image-button"><i class="fa fa-picture-o"></i></button>
+      <button id="embed-button"><i class="fas fa-angle-left"></i>&nbsp;&nbsp;<i class="fas fa-angle-right"></i></button>
+      <button id="image-button"><i class="fas fa-picture-o"></i></button>
     </div>
     <div id="editor-container" class="wysiwyg"></div>
     <script src="/js/jquery.min.js"></script>
